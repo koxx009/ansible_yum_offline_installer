@@ -1,0 +1,81 @@
+---
+# Preparing 
+- name: Create temporary rpm directory for {{ pack }}
+  file:
+    state: directory
+    path: /tmp/ansible-rpm/{{ pack }}
+  register: tmp_rpm
+
+- name: Archive
+  archive:
+    path: 
+      - "{{ role_path }}/files/{{ pack }}/*.rpm"
+    dest: "{{ role_path }}/files/{{ pack }}/{{ pack }}.tar.gz"
+    exclude_path:
+      - "{{ role_path }}/files/{{ pack }}"
+      - "{{ pack }}"
+      - "{{ role_path }}/files/{{ pack }}/{{ pack }}.tar.gz"
+    format: gz
+    force_archive: true
+  delegate_to: 127.0.0.1
+
+- name: Copy archive to temporary directory - {{ tmp_rpm.path }}
+  copy:
+    src: "files/{{ pack }}/{{ pack }}.tar.gz"
+    dest: "{{ tmp_rpm.path }}/{{ pack }}.tar.gz"
+    force: no
+  tags: copy
+
+- name: Delete source archive
+  file:
+    path: "{{ role_path }}/files/{{ pack }}/{{ pack }}.tar.gz"
+    state: absent
+  delegate_to: 127.0.0.1
+
+- name: Unarchive a file that is already on the remote machine
+  unarchive:
+    src: "{{ tmp_rpm.path }}/{{ pack }}.tar.gz"
+    dest: "{{ tmp_rpm.path }}"
+    remote_src: yes
+
+# Installing
+
+- name: Find all rpm files in /tmp folder
+  find:
+    paths: "{{ tmp_rpm.path }}"
+    patterns: "*.rpm"
+  register: rpm_files
+
+- set_fact:
+    rpm_list: "{{ rpm_files.files | map(attribute='path') | list }}"
+
+- name: Installing the rpm files
+  yum:
+    name: "{{ rpm_list }}"
+    state: present
+  when:
+    - skip_broken|bool == False
+    - disablerepo|bool == False
+
+- name: Installing the rpm files - skip_broken, disablerepo
+  yum:
+    name: "{{ rpm_list }}"
+    state: present
+    skip_broken: yes
+ #   disablerepo: ol7_UEKR5,ol7_latest
+  when: 
+    - skip_broken|bool == True
+
+- name: Installing the rpm files - disablerepo
+  yum:
+    name: "{{ rpm_list }}"
+    state: present
+    disablerepo: ol7_UEKR5,ol7_latest
+  when: 
+    - disablerepo|bool == True
+
+- name: remove_tmp_rpm
+  file:
+    state: absent
+    path: "{{ tmp_rpm.path|d('/tmp/ansible-rpm') }}"
+  tags: clean

@@ -1,0 +1,8 @@
+---
+# vars file for default-tools
+packs:
+  default_tools:
+    # name: [ 'audit-libs-python-2.8.4-4.el7.x86_64.rpm', 'bzip2-devel-1.0.6-13.el7.x86_64.rpm', 'checkpolicy-2.5-8.el7.x86_64.rpm', 'git-1.8.3.1-19.el7.x86_64.rpm', 'htop-2.2.0-3.el7.x86_64.rpm', 'iftop-1.0-0.21.pre4.el7.x86_64.rpm', 'iotop-0.6-4.el7.noarch.rpm', 'libcgroup-0.41-21.el7.x86_64.rpm', 'libsemanage-python-2.5-14.el7.x86_64.rpm', 'mc-4.8.7-11.el7.x86_64.rpm', 'nano-2.7.4-3.gf.el7.x86_64.rpm', 'perl-Error-0.17020-2.el7.noarch.rpm', 'perl-Git-1.8.3.1-19.el7.noarch.rpm', 'perl-TermReadKey-2.30-20.el7.x86_64.rpm', 'policycoreutils-2.5-33.el7.x86_64.rpm', 'policycoreutils-python-2.5-33.el7.x86_64.rpm', 'python-IPy-0.75-6.el7.noarch.rpm', 'python36-3.6.8-1.el7.x86_64.rpm', 'python36-libs-3.6.8-1.el7.x86_64.rpm', 'python36-pip-8.1.2-8.el7.noarch.rpm', 'python36-setuptools-39.2.0-3.el7.noarch.rpm', 'setools-libs-3.3.8-4.el7.x86_64.rpm', 'tcpdump-4.9.2-3.el7.x86_64.rpm', 'xterm-295-3.el7.x86_64.rpm' ]
+    name: audit-libs-python-2.8.4-4.el7.x86_64.rpm
+  # oracle:
+  #   name: [ 'piska', 'zhopa' ]
